@@ -37,20 +37,20 @@ services:
     depends_on:
       - zookeeper
 
-  kafka2:
-    container_name: kafka2
-    image: wurstmeister/kafka:latest
-    restart: always
-    ports:
-      - "9093:9093"
-    environment:
-      - KAFKA_BROKER_ID=1
-      - KAFKA_LISTENERS=PLAINTEXT://:9093
-      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://127.0.0.1:9093
-      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
-      - ALLOW_PLAINTEXT_LISTENER=yes
-    depends_on:
-      - zookeeper
+  # kafka2:
+  #   container_name: kafka2
+  #   image: wurstmeister/kafka:latest
+  #   restart: always
+  #   ports:
+  #     - "9093:9093"
+  #   environment:
+  #     - KAFKA_BROKER_ID=1
+  #     - KAFKA_LISTENERS=PLAINTEXT://:9093
+  #     - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://127.0.0.1:9093
+  #     - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+  #     - ALLOW_PLAINTEXT_LISTENER=yes
+  #   depends_on:
+  #     - zookeeper
 
   es01:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.15.0
