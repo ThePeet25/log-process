@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require('express');
-const passport = require("passport");
+const passport = require("../config/auth.js");
 const querystring = require("querystring");
 
 
