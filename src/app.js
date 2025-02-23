@@ -1,11 +1,12 @@
 require('dotenv').config();
 const express = require('express');
 const expressSession = require("express-session");
+const cookieParser = require("cookie-parser");
 const path = require('path');
 const authRouter = require('./routes/auth.js');
 const sequelize = require('./schema/db.js');
-const sendMessage = require('./services/producer.js');
-const passport = require("./config/auth.js");
+const { passport } = require("./config/auth.js");
+const kafkaRouter = require('./routes/kafka.js');
 
 const PORT = process.env.PORT
 const app = express();
@@ -29,29 +30,21 @@ app.set("view engine", "ejs");
 
 app.use(express.json());
 app.use(expressSession(session));
+app.use(cookieParser());
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.use("/", authRouter);
+app.use("/search", kafkaRouter);
 
 app.get("/", (req, res) => {
     res.render('index', {
-      title: 'Auth0 Webapp sample Nodejs',
-      isAuthenticated:  req.isAuthenticated()
+      title: 'real time log',
+      user: req.user,
+      isAuthenticated:  req.isAuthenticated(),
+      role: req.isAuthenticated() ? req.user._json['https://dev.com/claims/roles'][0] : 0 
     });
 });
-
-app.post('/send', async(req, res) => {
-    const data = req.body
-    try {
-        await sendMessage(data.topic, data.message);
-        console.log("success send");
-        res.send("success");
-    } catch(err) {
-        console.log('err', err);
-        res.send('cant send')
-    }
-})
 
 // app.get('/receive/:topic', async(req, res) => {
 //     const topic = req.params

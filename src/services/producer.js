@@ -1,3 +1,4 @@
+const { json } = require("sequelize");
 const { producer } = require("../config/kafka");
 
 const sendMessage = async (topic, message) => {
@@ -5,9 +6,10 @@ const sendMessage = async (topic, message) => {
     await producer.send({
         topic,
         messages: [{
-            value: message
+            value: JSON.stringify(message)
         }]
     });
+    console.log("send success topic :", topic);
     await producer.disconnect();
 }
 
