@@ -71,33 +71,6 @@ const verifyAccestoken = (req, res, next) => {
 
 }
 
-//verify admin accesstoken
-const verifyAdminAccestoken = (req, res, next) => {
-  //get token
-  const token = req.cookies.access_token;
-  //check token
-  if (!token) {
-    return res.status(401).json({
-      error: "Unauthoriaztion"
-    })
-  }
-  //verify jwt
-  jwt.verify(token, publicKey, {
-    audience: "https://dev.com/api/realtim-log/admin",
-    issuer: `https://YOUR_AUTH0_DOMAIN/`,
-    algorithms: ["RS256"]
-  }, (err, decoded) => {
-    if (err) {
-      console.log(err);
-      return res.status(401).json({
-        error: "Invalid Token"
-      })
-    }
-    req.user = decoded
-    next();
-  });
-}
-
 const checkRoles = (role) => (req, res, next) => {
   const userRoles = req.user["https://dev.com/claims/roles"] || [];
   //check role

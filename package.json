@@ -4,7 +4,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npx nodemon ./src/app.js"
+    "start": "npx nodemon ./src/app.js",
+    "consumer" : "npx nodemon ./src/services/consumer.js"
   },
   "author": "",
   "license": "ISC",
@@ -16,7 +17,6 @@
     "dotenv": "^16.4.7",
     "ejs": "^3.1.10",
     "express": "^4.21.2",
-    "express-openid-connect": "^2.17.1",
     "express-session": "^1.18.1",
     "jsonwebtoken": "^9.0.2",
     "jwks-rsa": "^3.1.0",

@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Cousine:ital,wght@0,400;0,700;1,400;1,700&family=Jaro:opsz@6..72&family=Oswald:wght@200..700&display=swap');
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #24252A;
+    display: flex;
+    justify-content: flex;
+    align-items: center;
+    padding: 10px 10%;
+    position: sticky;
+    top: 0;
+}
+
+a {
+    font-family: "Cousine", sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    color: #edf0f1;
+    text-decoration: none;
+}
+
+.logo-container {
+    padding: 10px 20px;
+    background-color: #edf0f1;
+    border-radius: 30px;
+}
+.logo {
+    cursor: pointer;
+}
+
+.navlink {
+    list-style: none;
+    margin-left: 3rem;
+}
+
+.navlink li {
+    display: inline-block;
+    padding: 0px 20px;
+}
+
+.navlink li a {
+    transition: all 0.3s ease 0s ;
+}
+
+.navlink li a:hover {
+    color: #0088a9
+}
+
+.gitbut {
+    padding: 9px 25px;
+    background-color: rgba(0, 136, 169, 1);
+    cursor: pointer;
+    transition: all 0.3s ease 0s;
+    margin-left: auto;
+}
+
+.gitbut:hover {
+    background-color: rgba(0, 136, 169, 0.8);
+}

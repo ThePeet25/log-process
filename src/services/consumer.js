@@ -22,5 +22,4 @@ const receiveMessage = async (topic) => {
     });
 }
 
-// module.exports = receiveMessage;
-receiveMessage("auth-log");
+module.exports = receiveMessage;

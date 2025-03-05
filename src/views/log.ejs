@@ -1,0 +1,31 @@
+<%- include('partials/header') -%>
+<section class="content-table-box">
+    <form class="input-box" method="GET" action="/search/all-log">
+            <input type="text" id="search" name="search" value="<%= searchQuery %>" placeholder="email">
+            <button type="submit"><img src="/images/search_icon.svg" alt="search"></button>
+    </form>
+    <table class="content-table">
+        <thead>
+            <tr>
+                <th>Time</th>
+                <th>Event</th>
+                <th>User ID</th>
+                <th>Provider</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% data.forEach(data =>  { %>
+            <tr>
+                <td><%= data.timestamp %></td>
+                <td><%= data.event %></td>
+                <td><%= data.user_id.split('|')[1] %></td>
+                <td><%= data.provider %></td>
+                <td><%= data.email %></td>
+            </tr>
+            <% }) %>
+        </tbody>
+    </table>
+</section>
+
+<%- include('partials/footer') -%>

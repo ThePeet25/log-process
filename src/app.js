@@ -7,6 +7,7 @@ const authRouter = require('./routes/auth.js');
 const sequelize = require('./schema/db.js');
 const { passport } = require("./config/auth.js");
 const kafkaRouter = require('./routes/kafka.js');
+const receiveMessage = require('./services/consumer.js');
 
 const PORT = process.env.PORT
 const app = express();
@@ -26,7 +27,7 @@ session.cookie.secure = true;
 
 app.set("views",  path.join(__dirname, '../src/views'));
 app.set("view engine", "ejs");
-// app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "public")));
 
 app.use(express.json());
 app.use(expressSession(session));
@@ -46,20 +47,10 @@ app.get("/", (req, res) => {
     });
 });
 
-// app.get('/receive/:topic', async(req, res) => {
-//     const topic = req.params
-//     try {
-//         const response = await receiveMessage(topic);
-//         console.log(response);
-//         res.json(response);
-//     } catch(err) {
-//         console.log('err', err);
-//         res.send("cant get message")
-//     }
-// })
-
 app.listen(PORT, async () => {
     console.log("app running on port", PORT);
     // await sequelize.sync({ force: true });
+    receiveMessage("auth-log");
     await sequelize.sync();
+
 })

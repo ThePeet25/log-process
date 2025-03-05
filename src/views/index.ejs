@@ -1,8 +1,38 @@
 <%- include('partials/header') -%>
 
-<h1 class="text-4xl">Hello World</h1>
+<section class="content">
+    <div class="content-box">
+        <h1>Welcome to logs website</h1>
+        <p>The website collects user logs when they log in,<br> and only email admins can view the logs.</p>
+        <div class="tools-content">
+            <p>The tools used are as follows.</p>
+            <div class="tool">
+                <img src="/images/auth0.svg" alt="Auht0">
+                <p>for Authenticaiton</p>
+            </div>
+            <div class="tool">
+                <img src="/images/kafka.svg" alt="Kafka">
+                <p>for send and receive logs</p>
+            </div>
+            <div class="tool">
+                <img src="/images/elasticsearch.svg" alt="Elasticsearch">
+                <p>for collects logs</p>
+            </div>
+            <div class="tool">
+                <img src="/images/nodejs.svg" alt="dev tools( node-js and docker)">
+                <img src="/images/docker.svg" alt="dev tools( node-js and docker)">
+                <p>for develop</p>
+            </div>
+        </div>
+        <div class="Admin">
+            <p>***Admin Account***</p>
+            <p>Username: admin1669@admin.admin</p>
+            <p>Password: @ADMINSEELOG1039</p>
+        </div>
+    </div>
+</section>
 
-<% if (locals.isAuthenticated) { %>
+<!-- <% if (locals.isAuthenticated) { %>
     <p>You are logged in. <a href="/user-info" class="underline">View your profile</a>.</p>
     <a href="/logout">logout</a>
 <% } else { %>
@@ -11,6 +41,6 @@
 <% if (locals.role == "Admin") {%>
     <p>You are Admin</p>
     <a href="/search/all-log">See all log</a>
-<% } %>
+<% } %> -->
 
 <%- include('partials/footer') -%>

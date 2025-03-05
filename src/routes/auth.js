@@ -29,6 +29,7 @@ router.get('/callback', (req, res, next) => {
             if (err) {
                 return next(err);
             }
+            //get access token for acess in database
             const token = req.user.accessToken
             res.cookie("access_token", token, {
                 maxAge: 300000,
@@ -36,8 +37,6 @@ router.get('/callback', (req, res, next) => {
                 secure: true,
                 sameSite: "none",
             });
-            // console.log(loginLog.log(req.user,"USER_LOGIN"));
-            console.log(req.user._json['https://dev.com/claims/roles'][0]);
             await sendMessage("auth-log", loginLog.log(req.user,"USER_LOGIN"));
             const returnTo = req.session.returnTo
             delete req.session.returnTo;
@@ -46,35 +45,18 @@ router.get('/callback', (req, res, next) => {
     })(req, res, next);
 });
 
-// router.get("/logout", (req, res) => {
-//     req.logOut();
-  
-//     let returnTo = req.protocol + "://" + req.hostname;
-//     const port = res.socket.remotePort;;
-  
-//     if (port !== undefined && port !== 80 && port !== 443) {
-//       returnTo =
-//         process.env.NODE_ENV === "production"
-//           ? `${returnTo}/`
-//           : `${returnTo}:${port}/`;
-//     }
-  
-//     const logoutURL = new URL(
-//       `https://${process.env.AUTH_DOMAIN}/v2/logout`
-//     );
-  
-//     const searchString = querystring.stringify({
-//       client_id: process.env.CLIENT_ID,
-//       returnTo: returnTo
-//     });
-//     logoutURL.search = searchString;
-  
-//     res.redirect(logoutURL);
-//   });
+//middleware before logout
+router.get("/logout", async (req, res, next) => {
+    if (req.isAuthenticated()) {
+        await sendMessage("auth-log", loginLog.log(req.user,"USER_LOGOUT"));
+        next();
+    } else {
+        console.log("Unauthenticated user attempting to logout.");
+    }
+})
 
 router.get("/logout", async (req, res) => {
     try {
-        await sendMessage("auth-log", loginLog.log(req.user,"USER_LOGOUT"));
         res.clearCookie("access_token");
         req.logout( () => {
             req.session.destroy( () => {
@@ -94,10 +76,13 @@ router.get("/user-info", verifyAccestoken, async (req, res) => {
         const response = await axios.get("https://dev-rw8npba0icf0l7fd.us.auth0.com/userinfo", {
             headers: { Authorization: `Bearer ${req.cookies.access_token}`}
         });
-        res.json({
-            response: response.data
+        res.render('profile', {
+            isAuthenticated:  req.isAuthenticated(),
+            data: response.data,
+            role: req.isAuthenticated() ? req.user['https://dev.com/claims/roles'][0] : 0
         });
     } catch(err) {
+        console.log("error ",err)
         res.status(500).json({
             error: "fail to get user data"
         })
