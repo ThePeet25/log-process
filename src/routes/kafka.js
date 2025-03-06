@@ -20,7 +20,7 @@ router.get('/all-log', verifyAccestoken, checkRoles("Admin"), async (req, res) =
             }]
         });
         const data = result.hits.hits.map(data => data._source);
-        const searchQuery = req.query.search || '';
+        const searchQuery = req.query.email || '';
         const filterData = data.filter(item => item.email.includes(searchQuery));
     res.render('log', {
         isAuthenticated:  req.isAuthenticated(),

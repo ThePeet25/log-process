@@ -36,7 +36,7 @@ This project utilizes Nodejs, Kafka, Elasticsearch, Docker, and Auth0 as the aut
 ## Environment Variables
 this is .env file. you can copy and place to .env on /log-process/.env
 
-/////////////////////////////////////////////////////////////////////////////////////////
+```
 #server config
 BASE_URL = http://localhost:3000
 PORT = 3000
@@ -60,24 +60,84 @@ KAFKA_BROKER = localhost:9092,localhost:9093
 
 #elasticsearch
 ELASTICSEARCH_HOST = http://localhost:9200
-///////////////////////////////////////////////////////////////////////////////////////////////////
+```
 
 ## Infomation
 Auth0: authentication and manage user roles.
+
 Kafka 
 - producer: send log to consumer
 - consumer: recieve log from producer and collect to Elasticsearch
+
 Elasticsearch: collect logs
+
 Nodejs: manage backend
 - create log in API to Auth0 
 - create call back API to  recieve accestoken to collect in cookie
 - crate log out API to log out
 - create middleware to send log before user log out
 - create user info API to display user data from Auth0
+
 EJS: display basic frontend
+
 PostgreSQL: setup for future feature
+
+## API Endpoints
+ Method | Endpoint | Description | Auth Required 
+------ | ----- | ----- | ----- |
+GET | /login | log in with auth0 | none |
+GET | /callback | return from login and get access token | none |
+GET | /logout | log out | none |
+GET | /user-info | get user data | access token |
+GET | /search/all-log | view all logs | admin role |
+GET | /search/all-log?email= | view log search by email | admin role |
+
+## Diagram
+```mermaid
+sequenceDiagram
+    participant User
+    participant Admin
+    participant Frontend
+    participant Backend
+    participant Producer
+    participant Consumer
+    participant Elasticsearch
+
+    User->>Frontend: Login Request
+    Frontend->>Backend: Forward Login Request
+    Backend->>Auth0: Authenticate User
+    Auth0-->>Backend: Return Access Token
+    Backend->>Producer: Call for send login log
+    Producer->>Consumer: Send Login log
+    Consumer->>Elasticsearch: Store Log Data
+    Backend-->>Frontend: Set Auth Cookie
+    Frontend-->>User: Login Successful
+
+    User->>Frontend: Logout Request
+    Frontend->>Backend: Forward Logout Request
+    Backend->>Producer: Call for send logout log
+    Producer->>Consumer: Send Logout log
+    Consumer->>Elasticsearch: Store Log Data
+    Backend-->>Frontend: Clear Auth Cookie
+    Frontend-->>User: Logout Successful
+
+    User->>Frontend: User-info Request
+    Frontend->>Backend: verify access token
+    Backend->>Auth0: Request User-info with access token
+    Auth0-->>Backend: return User data
+    Backend-->>Frontend: send User data
+    Frontend-->>User: display User data
+
+    Admin->>Frontend: view all logs request
+    Frontend->>Backend: verify admin role
+    Backend->>Elasticsearch: request all logs
+    Elasticsearch-->>Backend: return all logs
+    Backend-->>Frontend: send logs data
+    Frontend-->>Admin: display all logs
+```
 
 ## Contact
 Email : 66200383@kmitl.ac.th
+
 Github: https://github.com/ThePeet25
 
